@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 const catchAsync = require("./catchAsync");
+const Post = require("./models/postModel");
+require('dotenv').config();
+
 let refreshTokens = [];
 
 exports.notFound = function(req, res){
@@ -7,17 +10,18 @@ exports.notFound = function(req, res){
   };
 
 exports.errHandler = (err, req, res, next) => {
-    res.status(500).json({"Error": "Some kind of error occurred."});
+    res.status(500).json({"Error": "Some kind of error occurred.", "err": err.message});
 }
 
 exports.authToken = function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
-    console.log(req.headers['authorization']);
     const token = authHeader && authHeader.split(' ')[1];
     jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        if (err) return res.sendStatus(403)
+        if (err) {
+            return res.sendStatus(403)
+        }
         req.user = user;
-        next()
+        next();
       });
     
   }
@@ -60,7 +64,7 @@ exports.token = (req, res) => {
 
 
 function generateAccessToken(user){
-    return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '15s' })
+    return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '55s' })
 }
 
 function generateRefreshToken(user){

@@ -36,9 +36,7 @@ function authenticateToken(req, res, next) {
     const token = authHeader && authHeader.split(' ')[1];
     jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
         if (err) {
-            console.log(err)
             return res.sendStatus(403)}
-            console.log("hi 123")
         req.user = user;
         next();
       });

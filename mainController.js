@@ -56,7 +56,7 @@ exports.userAll = catchAsync(async (req, res, next) => {
 exports.token = async (req, res) => {
     const refreshToken = req.body.token;
     if (refreshToken === null) return res.sendStatus(401)
-    if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
+    if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
     try {
         let _user = await verifyToken(refreshToken, process.env.REF_TOKEN_SECRET);
         const accessToken = generateAccessToken(_user);
@@ -68,16 +68,16 @@ exports.token = async (req, res) => {
 
 
 function generateAccessToken(user){
-    return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '55s' })
+    return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '55s' });
 }
 
 function generateRefreshToken(user){
-    return jwt.sign(user, process.env.REF_TOKEN_SECRET)
+    return jwt.sign(user, process.env.REF_TOKEN_SECRET);
 }
 async function verifyToken(token,key){
     if(!token) return {};
     return new Promise((resolve,reject) =>
-       jwt.verify(token,key,(err,user) => err ? reject({}) : resolve(user))
+       jwt.verify(token,key,(err,user) => err ? reject({}) : resolve(user));
     );
  }
  

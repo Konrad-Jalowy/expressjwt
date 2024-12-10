@@ -1,0 +1,13 @@
+[
+    {
+      "title": "My first post",
+      "content": "Hello! How are you!",
+      "author": "Jane Doe"
+    },
+    {
+        "title": "Translation problem",
+        "content": "Lorem ipsum, what does it mean?",
+        "author": "John Doe"
+    }
+    
+]

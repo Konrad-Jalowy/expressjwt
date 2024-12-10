@@ -42,6 +42,13 @@ app.post("/login", (req, res) => {
     const accessToken = jwt.sign(_user, process.env.SECRET_KEY);
     res.json({"user": _user, "accessToken": accessToken});
 });
+app.use((err, req, res, next) => {
+    res.status(500).json({"Error": "Some kind of error occurred."});
+});
+
+app.get("*", function(req, res){
+    res.status(404).json({"Error": "Endpoint doesnt exist"});
+  });
 
 
 

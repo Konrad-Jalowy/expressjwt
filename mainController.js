@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 
+let refreshTokens = [];
 
 exports.notFound = function(req, res){
     res.status(404).json({"Error": "Endpoint doesnt exist"});
@@ -25,6 +26,15 @@ exports.delete = (req, res) => {
     refreshTokens = refreshTokens.filter(token => token !== req.body.token);
     res.sendStatus(204);
   }
+
+exports.login = (req, res) => {
+    const username = req.body.username;
+    const _user = { name: username };
+    const accessToken = generateAccessToken(_user);
+    const refreshToken = jwt.sign(_user, process.env.REF_TOKEN_SECRET)
+    refreshTokens.push(refreshToken)
+    res.json({"user": _user, "accessToken": accessToken, "refreshToken": refreshToken})
+}
 
 
 function generateAccessToken(user){

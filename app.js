@@ -6,8 +6,6 @@ const catchAsync = require("./catchAsync");
 const MainController = require("./mainController");
 require('dotenv').config();
 
-let refreshTokens = [];
-
 app.use(express.json())
 
 app.get("/", (req, res) => {
@@ -29,14 +27,7 @@ app.get('/user-all', MainController.authToken, catchAsync(async (req, res, next)
     return res.json({"your_usenmare": _username, "your_posts": _posts});
   }));
 
-app.post("/login", (req, res) => {
-    const username = req.body.username;
-    const _user = { name: username };
-    const accessToken = generateAccessToken(_user);
-    const refreshToken = jwt.sign(_user, process.env.REF_TOKEN_SECRET)
-    refreshTokens.push(refreshToken)
-    res.json({"user": _user, "accessToken": accessToken, "refreshToken": refreshToken});
-});
+app.post("/login", MainController.login);
 
 app.post('/token', (req, res) => {
     const refreshToken = req.body.token

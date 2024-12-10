@@ -23,4 +23,10 @@ app.post("/login", (req, res) => {
     res.json({"user": _user, "accessToken": accessToken});
 });
 
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    
+  }
+
 module.exports = app;

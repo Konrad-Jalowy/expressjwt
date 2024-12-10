@@ -12,13 +12,13 @@ app.get("/", (req, res) => {
     res.json({"hello": "world"});
 });
 
-app.get("/tokenprotected", authenticateToken, (req, res) => {
+app.get("/tokenprotected", MainController.authToken, (req, res) => {
     return res.json({"msg": "you sent correct token!"});
 })
 
 app.get("/all", MainController.all);
 
-app.get('/user-all', authenticateToken, MainController.userAll);
+app.get('/user-all', MainController.authToken, MainController.userAll);
 
 app.post("/login", MainController.login);
 
@@ -29,18 +29,5 @@ app.delete('/logout', MainController.delete);
 app.use(MainController.errHandler);
 
 app.get("*", MainController.notFound);
-
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    console.log(req.headers['authorization']);
-    const token = authHeader && authHeader.split(' ')[1];
-    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        if (err) {
-            return res.sendStatus(403)}
-        req.user = user;
-        next();
-      });
-    
-  }
 
 module.exports = app;

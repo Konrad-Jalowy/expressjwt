@@ -66,9 +66,7 @@ app.delete('/logout', (req, res) => {
     refreshTokens = refreshTokens.filter(token => token !== req.body.token);
     res.sendStatus(204);
   });
-app.use((err, req, res, next) => {
-    res.status(500).json({"Error": "Some kind of error occurred."});
-});
+app.use(MainController.errHandler);
 
 app.get("*", MainController.notFound);
 

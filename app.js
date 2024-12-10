@@ -3,6 +3,7 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const Post = require('./models/postModel');
 const catchAsync = require("./catchAsync");
+const MainController = require("./mainController");
 require('dotenv').config();
 
 let refreshTokens = [];
@@ -69,9 +70,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({"Error": "Some kind of error occurred."});
 });
 
-app.get("*", function(req, res){
-    res.status(404).json({"Error": "Endpoint doesnt exist"});
-  });
+app.get("*", MainController.notFound);
 
 function generateAccessToken(user){
     return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '15s' })

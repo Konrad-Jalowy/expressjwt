@@ -7,12 +7,10 @@ require('dotenv').config();
 
 
 function authenticateToken(req, res, next) {
-    console.log("hi")
     const authHeader = req.headers['authorization']
     console.log(req.headers['authorization']);
     const token = authHeader && authHeader.split(' ')[1];
     jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        console.log(err)
         if (err) return res.sendStatus(403)
         req.user = user;
         next()
@@ -35,6 +33,12 @@ app.get("/all", catchAsync(async (req, res,next) => {
     let _posts = await Post.find({});
     return res.json({"posts": _posts});
 }));
+
+app.get('/user-all', authenticateToken, catchAsync(async (req, res, next) => {
+    let _username = req.user.name
+    let _posts =   await Post.find({"author": _username});
+    return res.json({"your_usenmare": _username, "your_posts": _posts});
+  }));
 
 app.post("/login", (req, res) => {
     const username = req.body.username

@@ -1,12 +1,12 @@
-const express = require('express')
+const express = require('express');
+
 const app = express();
-const jwt = require('jsonwebtoken');
-const Post = require('./models/postModel');
-const catchAsync = require("./catchAsync");
+
 const MainController = require("./mainController");
+
 require('dotenv').config();
 
-app.use(express.json())
+app.use(express.json());
 
 app.get("/", (req, res) => {
     res.json({"hello": "world"});

@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Konrad-Jalowy/expressjwt#readme",
   "dependencies": {
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "mongoose": "^8.8.4"
   }
 }

@@ -36,7 +36,8 @@ exports.login = (req, res) => {
     const _user = { name: username };
     const accessToken = generateAccessToken(_user);
     const refreshToken = generateRefreshToken(_user);
-    refreshTokens.push(refreshToken)
+    refreshTokens.push(refreshToken);
+    console.log(refreshTokens)
     res.json({"user": _user, "accessToken": accessToken, "refreshToken": refreshToken})
 }
 
@@ -51,15 +52,29 @@ exports.userAll = catchAsync(async (req, res, next) => {
     return res.json({"your_usenmare": _username, "your_posts": _posts});
   });
 
-exports.token = (req, res) => {
+// exports.token = (req, res) => {
+//     const refreshToken = req.body.token
+//     if (refreshToken == null) return res.sendStatus(401)
+//     if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
+//     jwt.verify(refreshToken, process.env.REF_TOKEN_SECRET, (err, user) => {
+//       if (err) return res.sendStatus(403)
+//       const accessToken = generateAccessToken({ name: user.name })
+//       res.json({ accessToken: accessToken })
+//     });
+//   };
+
+exports.token = async (req, res) => {
     const refreshToken = req.body.token
-    if (refreshToken == null) return res.sendStatus(401)
+    console.log(refreshToken)
+    if (refreshToken === null) return res.sendStatus(401)
     if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
-    jwt.verify(refreshToken, process.env.REF_TOKEN_SECRET, (err, user) => {
-      if (err) return res.sendStatus(403)
-      const accessToken = generateAccessToken({ name: user.name })
-      res.json({ accessToken: accessToken })
-    });
+    try {
+        let _user = await verifyToken(refreshToken, process.env.REF_TOKEN_SECRET);
+        const accessToken = generateAccessToken(_user);
+        return res.json({ accessToken: accessToken })
+    } catch {
+        return res.sendStatus(403);
+    }
   };
 
 

@@ -44,7 +44,7 @@ app.get('/user-all', authenticateToken, catchAsync(async (req, res, next) => {
 app.post("/login", (req, res) => {
     const username = req.body.username;
     const _user = { name: username };
-    const accessToken = jwt.sign(_user, process.env.SECRET_KEY);
+    const accessToken = generateAccessToken(_user);
     res.json({"user": _user, "accessToken": accessToken});
 });
 app.use((err, req, res, next) => {

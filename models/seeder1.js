@@ -19,9 +19,6 @@ const importData = async (users) => {
 (async () => {
     try {
         await mongoose.connect(process.env.MONGO_URL);
-        
-        console.log("seeder running");
-        
         const data = await fs.readFile(`${__dirname}/${fname}`, 'utf-8');
         const posts = JSON.parse(data);
         importData(posts);

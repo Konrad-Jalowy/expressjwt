@@ -47,6 +47,11 @@ app.post("/login", (req, res) => {
     const accessToken = generateAccessToken(_user);
     res.json({"user": _user, "accessToken": accessToken});
 });
+
+app.delete('/logout', (req, res) => {
+    refreshTokens = refreshTokens.filter(token => token !== req.body.token);
+    res.sendStatus(204);
+  });
 app.use((err, req, res, next) => {
     res.status(500).json({"Error": "Some kind of error occurred."});
 });

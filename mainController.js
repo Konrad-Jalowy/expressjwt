@@ -13,17 +13,29 @@ exports.errHandler = (err, req, res, next) => {
     res.status(500).json({"Error": "Some kind of error occurred.", "err": err.message});
 }
 
-exports.authToken = function authenticateToken(req, res, next) {
+// exports.authToken = function authenticateToken(req, res, next) {
+//     const authHeader = req.headers['authorization'];
+//     const token = authHeader && authHeader.split(' ')[1];
+//     jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+//         if (err) {
+//             return res.sendStatus(403);
+//         }
+//         req.user = user;
+//         next();
+//       });
+    
+//   }
+
+exports.authToken = async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        if (err) {
-            return res.sendStatus(403);
-        }
-        req.user = user;
+    try {
+        const _user = await verifyToken(token, process.env.SECRET_KEY);
+        req.user = _user;         
         next();
-      });
-    
+    } catch {
+        return res.sendStatus(403);
+    }
   }
 
 exports.delete = (req, res) => {
@@ -70,3 +82,10 @@ function generateAccessToken(user){
 function generateRefreshToken(user){
     return jwt.sign(user, process.env.REF_TOKEN_SECRET)
 }
+async function verifyToken(token,key){
+    if(!token) return {};
+    return new Promise((resolve,reject) =>
+       jwt.verify(token,key,(err,user) => err ? reject({}) : resolve(user))
+    );
+ }
+ 

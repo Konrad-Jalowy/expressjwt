@@ -2,6 +2,7 @@ const express = require('express')
 const app = express();
 const jwt = require('jsonwebtoken');
 const Post = require('./models/postModel');
+const catchAsync = require("./catchAsync");
 require('dotenv').config();
 
 app.use(express.json())
@@ -10,10 +11,10 @@ app.get("/", (req, res) => {
     res.json({"hello": "world"});
 });
 
-app.get("/all", async (req, res) => {
+app.get("/all", catchAsync(async (req, res,next) => {
     let _posts = await Post.find({});
     return res.json({"posts": _posts});
-});
+}));
 
 app.post("/login", (req, res) => {
     const username = req.body.username

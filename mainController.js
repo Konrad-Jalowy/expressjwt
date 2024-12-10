@@ -77,7 +77,7 @@ function generateRefreshToken(user){
 async function verifyToken(token,key){
     if(!token) return {};
     return new Promise((resolve,reject) =>
-       jwt.verify(token,key,(err,user) => err ? reject({}) : resolve(user));
+       jwt.verify(token,key,(err,user) => err ? reject({}) : resolve(user))
     );
  }
  

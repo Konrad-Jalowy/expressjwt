@@ -50,6 +50,17 @@ app.post("/login", (req, res) => {
     res.json({"user": _user, "accessToken": accessToken, "refreshToken": refreshToken});
 });
 
+app.post('/token', (req, res) => {
+    const refreshToken = req.body.token
+    if (refreshToken == null) return res.sendStatus(401)
+    if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
+    jwt.verify(refreshToken, process.env.REF_TOKEN_SECRET, (err, user) => {
+      if (err) return res.sendStatus(403)
+      const accessToken = generateAccessToken({ name: user.name })
+      res.json({ accessToken: accessToken })
+    });
+  });
+
 app.delete('/logout', (req, res) => {
     refreshTokens = refreshTokens.filter(token => token !== req.body.token);
     res.sendStatus(204);

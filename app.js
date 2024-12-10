@@ -49,12 +49,8 @@ app.post('/token', (req, res) => {
     });
   });
 
-app.delete('/logout', (req, res) => {
-    refreshTokens = refreshTokens.filter(token => token !== req.body.token);
-    res.sendStatus(204);
-  });
+app.delete('/logout', MainController.delete);
 app.use(MainController.errHandler);
-
 app.get("*", MainController.notFound);
 
 function generateAccessToken(user){

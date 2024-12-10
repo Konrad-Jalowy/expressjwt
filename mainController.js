@@ -21,6 +21,11 @@ exports.authToken = function authenticateToken(req, res, next) {
     
   }
 
+exports.delete = (req, res) => {
+    refreshTokens = refreshTokens.filter(token => token !== req.body.token);
+    res.sendStatus(204);
+  }
+
 
 function generateAccessToken(user){
     return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '15s' })

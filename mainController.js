@@ -31,7 +31,7 @@ exports.login = (req, res) => {
     const username = req.body.username;
     const _user = { name: username };
     const accessToken = generateAccessToken(_user);
-    const refreshToken = jwt.sign(_user, process.env.REF_TOKEN_SECRET)
+    const refreshToken = generateRefreshToken(_user);
     refreshTokens.push(refreshToken)
     res.json({"user": _user, "accessToken": accessToken, "refreshToken": refreshToken})
 }
@@ -64,5 +64,5 @@ function generateAccessToken(user){
 }
 
 function generateRefreshToken(user){
-    return jwt.sign(_user, process.env.REF_TOKEN_SECRET)
+    return jwt.sign(user, process.env.REF_TOKEN_SECRET)
 }

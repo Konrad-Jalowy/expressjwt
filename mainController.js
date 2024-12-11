@@ -37,8 +37,7 @@ exports.login = (req, res) => {
     const accessToken = generateAccessToken(_user);
     const refreshToken = generateRefreshToken(_user);
     refreshTokens.push(refreshToken);
-    console.log(refreshTokens)
-    res.json({"user": _user, "accessToken": accessToken, "refreshToken": refreshToken})
+    return res.json({"user": _user, "accessToken": accessToken, "refreshToken": refreshToken});
 }
 
 exports.all = catchAsync(async (req, res,next) => {
